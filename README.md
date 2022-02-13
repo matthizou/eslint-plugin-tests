@@ -21,7 +21,7 @@
      </td>
      <td>Generic (test files)</td>
      <td>
-     Basic validation of tests' decriptions
+     Basic validation of tests' descriptions
      </td>
     </tr>
 </table>
