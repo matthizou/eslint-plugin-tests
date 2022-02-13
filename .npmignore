@@ -1,0 +1,8 @@
+node_modules
+.idea
+__tests__
+.npmignore
+.eslintrc.json
+docs
+coverage
+.github
