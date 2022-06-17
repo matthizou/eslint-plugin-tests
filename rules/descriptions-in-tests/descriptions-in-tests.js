@@ -113,8 +113,8 @@ module.exports = {
 function analyse(node, { noVagueVerbs }) {
   const stringDelimiter = node.value[0]
   const text = node.value.slice(1, -1)
-  const startIndex = node.start
-  const endIndex = node.end
+  const startIndex = node.range[0]
+  const endIndex = node.range[1]
 
   if (text.length === 0) {
     return {
