@@ -168,7 +168,7 @@ function analyse(node, { noVagueVerbs }) {
     // "should not create" --> "not create" --> "does not create"
     message = errorMessages.GENERIC_ERROR
     fix = fixer => {
-      const newDescription = `${stringDelimiter}does ${text}`
+      const newDescription = `${stringDelimiter}does ${text}${stringDelimiter}`
       return fixer.replaceText(node, newDescription)
     }
   }
