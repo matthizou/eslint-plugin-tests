@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - beta
 
 jobs:
   main:
@@ -25,8 +26,7 @@ jobs:
         id: yarn-cache
         with:
           path: node_modules
-          key:
-            ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}-${{
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}-${{
             hashFiles('.github/workflows/**.yml') }}
 
       - name: Install Node.js dependencies
@@ -35,7 +35,8 @@ jobs:
 
       - run: yarn deploy
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Run tests
         run: yarn test:ci

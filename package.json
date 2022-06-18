@@ -2,7 +2,7 @@
   "name": "eslint-plugin-tests",
   "version": "0.2.0",
   "main": "index.js",
-  "description": "Linting rules",
+  "description": "Linting rules for unit testing",
   "scripts": {
     "precommit": "lint-staged",
     "test": "jest",
