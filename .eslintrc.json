@@ -7,19 +7,18 @@
     "ecmaVersion": 9,
     "sourceType": "script"
   },
-  "plugins": ["eslint-plugin", "node", "prettier", "jest"],
+  "plugins": ["eslint-plugin", "node", "jest"],
   "extends": [
     "eslint:recommended",
     "plugin:eslint-plugin/recommended",
     "plugin:node/recommended",
-    "plugin:prettier/recommended",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "spaced-comment": ["error", "always"],
     "no-var": "error",
     "object-shorthand": "error",
-    "prefer-arrow-callback": "error",
     "prefer-const": "error",
     "strict": 0,
     "eslint-plugin/prefer-placeholders": 0,
@@ -28,6 +27,6 @@
     "eslint-plugin/test-case-shorthand-strings": 0,
     "node/no-unsupported-features": ["error", { "version": 9 }],
     "node/no-unpublished-require": 0,
-    "prettier/prettier": "error"
+    "prettier/prettier": 0
   }
 }

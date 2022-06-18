@@ -9,7 +9,7 @@ const errorMessages = emojiconize({
   WRONG_GRAMMAR_ADD_S:
     'Add a "s" at the end of this verb to conjugate it with the subject "it"',
   VAGUE_START:
-    'Avoid vague start of descriptions (should, could, may, might). Be assertive!'
+    'Avoid vague start of descriptions (should, could, may, might). Be assertive!',
 })
 
 const COMMON_REGULAR_VERBS = [
@@ -54,7 +54,7 @@ const COMMON_REGULAR_VERBS = [
   'toggle',
   'track',
   'throw',
-  'trigger'
+  'trigger',
 ]
 
 // For those ones cannot be conjugated with 'it' by just adding a final 's'
@@ -65,23 +65,30 @@ const COMMON_IRREGULAR_VERBS = {
   do: 'does',
   go: 'goes',
   have: 'has',
-  "don't": "doesn't"
+  "don't": "doesn't",
 }
 const VAGUE_VERBS = ['should', 'could', 'may', 'might']
 
 module.exports = {
   meta: {
+    schema: [
+      {
+        noVagueVerbs: {
+          type: 'boolean',
+        },
+      },
+    ],
     type: 'suggestion',
     docs: {
-      description: ''
+      description: "Normalize tests' descriptions",
     },
-    fixable: 'code'
+    fixable: 'code',
   },
 
   create(context) {
     const options = {
       noVagueVerbs: false,
-      ...context.options[0]
+      ...context.options[0],
     }
 
     const sourceCode = context.getSourceCode()
@@ -95,27 +102,27 @@ module.exports = {
             const descriptionNode = args[0]
             const { message, startIndex, endIndex, fix } = analyse(
               sourceCode.getFirstToken(descriptionNode),
-              options
+              options,
             )
             if (message) {
               const loc = {
                 start: sourceCode.getLocFromIndex(startIndex),
-                end: sourceCode.getLocFromIndex(endIndex)
+                end: sourceCode.getLocFromIndex(endIndex),
               }
               context.report({
                 loc,
                 message,
                 data: {},
-                fix
+                fix,
               })
             }
           }
         }
-      }
+      },
     }
   },
 
-  errorMessages
+  errorMessages,
 }
 
 function analyse(node, { noVagueVerbs }) {
@@ -128,7 +135,7 @@ function analyse(node, { noVagueVerbs }) {
     return {
       message: errorMessages.REQUIRED_DESCRIPTION,
       startIndex,
-      endIndex
+      endIndex,
     }
   }
   const [firstWord] = text.split(' ')
@@ -136,26 +143,26 @@ function analyse(node, { noVagueVerbs }) {
   let fix
   if (firstWord.match(/^[A-Z]/)) {
     message = errorMessages.NO_CAPITALIZATION
-    fix = fixer => {
+    fix = (fixer) => {
       const newDescription = `${stringDelimiter}${text[0].toLowerCase()}${text.slice(
-        1
+        1,
       )}${stringDelimiter}`
       return fixer.replaceText(node, newDescription)
     }
   }
   if (COMMON_REGULAR_VERBS.includes(firstWord)) {
     message = errorMessages.WRONG_GRAMMAR_ADD_S
-    fix = fixer => {
+    fix = (fixer) => {
       const newDescription = `${stringDelimiter}${text.slice(
         0,
-        firstWord.length
+        firstWord.length,
       )}s${text.slice(firstWord.length)}${stringDelimiter}`
       return fixer.replaceText(node, newDescription)
     }
   }
   if (COMMON_IRREGULAR_VERBS[firstWord]) {
     message = errorMessages.WRONG_GRAMMAR
-    fix = fixer => {
+    fix = (fixer) => {
       const newDescription = `${stringDelimiter}${
         COMMON_IRREGULAR_VERBS[firstWord]
       }${text.slice(firstWord.length)}${stringDelimiter}`
@@ -164,7 +171,7 @@ function analyse(node, { noVagueVerbs }) {
   }
   if (noVagueVerbs && VAGUE_VERBS.includes(firstWord)) {
     message = errorMessages.VAGUE_START
-    fix = fixer => {
+    fix = (fixer) => {
       const newDescription = `${stringDelimiter}${text
         .slice(firstWord.length)
         .trim()}${stringDelimiter}`
@@ -175,7 +182,7 @@ function analyse(node, { noVagueVerbs }) {
     // This rule is added for the autofix (run recursively)
     // "should not create" --> "not create" --> "does not create"
     message = errorMessages.GENERIC_ERROR
-    fix = fixer => {
+    fix = (fixer) => {
       const newDescription = `${stringDelimiter}does ${text}${stringDelimiter}`
       return fixer.replaceText(node, newDescription)
     }
@@ -185,6 +192,6 @@ function analyse(node, { noVagueVerbs }) {
     message,
     startIndex: startIndex + 1,
     endIndex: startIndex + 1 + firstWord.length,
-    fix
+    fix,
   }
 }
