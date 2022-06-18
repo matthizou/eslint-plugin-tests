@@ -11,6 +11,9 @@
     "lint": "eslint rules index.js",
     "create-new-rule": "npx hygen generator new-rule"
   },
+  "dependencies": {
+    "@babel/parser": "^7.18.5"
+  },
   "devDependencies": {
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
@@ -22,7 +25,7 @@
     "husky": "^8.0.1",
     "jest": "^28.1.1",
     "jest-runner-eslint": "^1.0.1",
-    "lint-staged": "^7.2.2",
+    "lint-staged": "^13.0.2",
     "prettier": "^2.7.1",
     "semantic-release": "^19.0.3",
     "standard-version": "^9.5.0"
@@ -31,25 +34,12 @@
     "node": ">= 10.*"
   },
   "license": "ISC",
-  "lint-staged": {
-    "concurrent": false,
-    "linters": {
-      "rules/*.js": [
-        "prettier --write",
-        "eslint --fix",
-        "git add"
-      ],
-      "*.+(json|md)": [
-        "prettier --write",
-        "git add"
-      ]
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/matthizou/eslint-plugin-tests"
   },
-  "dependencies": {
-    "@babel/parser": "^7.18.5"
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.{js,ts,tsx,css,json,md}": "prettier --write"
   }
 }
