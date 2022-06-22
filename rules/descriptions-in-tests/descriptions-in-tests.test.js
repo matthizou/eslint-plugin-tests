@@ -1,15 +1,15 @@
-const rule = require('./descriptions-in-tests')
-const RuleTester = require('eslint').RuleTester
+const rule = require("./descriptions-in-tests");
+const RuleTester = require("eslint").RuleTester;
 const ruleTester = new RuleTester({
   parserOptions: {
     ecmaVersion: 8,
-    sourceType: 'module',
+    sourceType: "module",
   },
-})
+});
 
-const { errorMessages } = rule
+const { errorMessages } = rule;
 
-ruleTester.run('jest-descriptions-first-word', rule, {
+ruleTester.run("jest-descriptions-first-word", rule, {
   valid: [
     {
       code: `it("does nothing", () => {})`,
@@ -57,9 +57,16 @@ ruleTester.run('jest-descriptions-first-word', rule, {
       output: 'it("do something", () => {})', // Normally run recursively, so will become: `does`
     },
     {
+      // Pattern seen in recursive autofix
       code: `it("not return anything", () => {})`,
       errors: [{ message: errorMessages.GENERIC_ERROR }],
       output: 'it("does not return anything", () => {})',
     },
+    {
+      // Pattern seen in recursive autofix
+      code: `it("not be called", () => {})`,
+      errors: [{ message: errorMessages.GENERIC_ERROR }],
+      output: 'it("is not called", () => {})',
+    },
   ],
-})
+});

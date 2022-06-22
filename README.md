@@ -25,3 +25,19 @@
      </td>
     </tr>
 </table>
+
+## Configuration
+
+In eslint config
+
+```js
+  plugins: ['eslint-plugin-tests'],
+  overrides: [ // Only activated for test files
+    {
+      files: ['*.test.*', '*.spec.*'],
+      rules: {
+        'tests/descriptions-in-tests': ['warn', { noVagueVerbs: true }],
+      },
+    },
+  ],
+```
