@@ -58,6 +58,12 @@ ruleTester.run("jest-descriptions-first-word", rule, {
     },
     {
       // Pattern seen in recursive autofix
+      code: `it("it does something", () => {})`,
+      errors: [{ message: errorMessages.DUPLICATED_IT }],
+      output: 'it("does something", () => {})',
+    },
+    {
+      // Pattern seen in recursive autofix
       code: `it("not return anything", () => {})`,
       errors: [{ message: errorMessages.GENERIC_ERROR }],
       output: 'it("does not return anything", () => {})',

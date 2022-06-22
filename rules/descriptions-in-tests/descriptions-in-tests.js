@@ -2,6 +2,8 @@
 const emojiconize = require("../helpers/emojiconize");
 
 const errorMessages = emojiconize({
+  DUPLICATED_IT:
+    "Don't start with `it`. By convention, the function name,`it`, is part of the description",
   REQUIRED_DESCRIPTION: "Missing description",
   GENERIC_ERROR: "Hm, that does not seem right",
   NO_CAPITALIZATION: "Start descriptions with a lower-case letter",
@@ -130,6 +132,7 @@ function analyse(node, { noVagueVerbs }) {
   const text = node.value.slice(1, -1);
   const startIndex = node.range[0];
   const endIndex = node.range[1];
+  let newDescription;
 
   if (text.length === 0) {
     return {
@@ -144,7 +147,7 @@ function analyse(node, { noVagueVerbs }) {
   if (firstWord.match(/^[A-Z]/)) {
     message = errorMessages.NO_CAPITALIZATION;
     fix = (fixer) => {
-      const newDescription = `${stringDelimiter}${text[0].toLowerCase()}${text.slice(
+      newDescription = `${stringDelimiter}${text[0].toLowerCase()}${text.slice(
         1
       )}${stringDelimiter}`;
       return fixer.replaceText(node, newDescription);
@@ -153,7 +156,7 @@ function analyse(node, { noVagueVerbs }) {
   if (COMMON_REGULAR_VERBS.includes(firstWord)) {
     message = errorMessages.WRONG_GRAMMAR_ADD_S;
     fix = (fixer) => {
-      const newDescription = `${stringDelimiter}${text.slice(
+      newDescription = `${stringDelimiter}${text.slice(
         0,
         firstWord.length
       )}s${text.slice(firstWord.length)}${stringDelimiter}`;
@@ -163,7 +166,7 @@ function analyse(node, { noVagueVerbs }) {
   if (COMMON_IRREGULAR_VERBS[firstWord]) {
     message = errorMessages.WRONG_GRAMMAR;
     fix = (fixer) => {
-      const newDescription = `${stringDelimiter}${
+      newDescription = `${stringDelimiter}${
         COMMON_IRREGULAR_VERBS[firstWord]
       }${text.slice(firstWord.length)}${stringDelimiter}`;
       return fixer.replaceText(node, newDescription);
@@ -172,7 +175,7 @@ function analyse(node, { noVagueVerbs }) {
   if (noVagueVerbs && VAGUE_VERBS.includes(firstWord)) {
     message = errorMessages.VAGUE_START;
     fix = (fixer) => {
-      const newDescription = `${stringDelimiter}${text
+      newDescription = `${stringDelimiter}${text
         .slice(firstWord.length)
         .trim()}${stringDelimiter}`;
       return fixer.replaceText(node, newDescription);
@@ -194,6 +197,15 @@ function analyse(node, { noVagueVerbs }) {
       } else {
         newDescription = `${stringDelimiter}does ${text}${stringDelimiter}`;
       }
+      return fixer.replaceText(node, newDescription);
+    };
+  }
+  if (firstWord === "it") {
+    message = errorMessages.DUPLICATED_IT;
+    fix = (fixer) => {
+      newDescription = `${stringDelimiter}${text
+        .slice(firstWord.length)
+        .trim()}${stringDelimiter}`;
       return fixer.replaceText(node, newDescription);
     };
   }
