@@ -29,13 +29,21 @@ nothing more.
   Whether the descriptions can start with verbs indicating a probability, such
   as "should", "could", "may".
 
+- `preferWhenToIf` _[Boolean] Optional_  
+  Default: **false**
+
+  Prompt the user to change `if` for `when` in the context part of the description, when present.  
+  ie: `it('does something if the user clicks on the button', ....`
+
 ---
 
 ## Rules
 
 - The description shouldn't be empty
 
-- The first word of the description should start with a lower-case letter
+- The description shouldn't be more the 100 characters
+
+- The first word of the description should start with a **lower-case** letter
 
 - The first word must be conjugated with "it".  
   This rule can recognize the most often used verbs and whether they are
@@ -64,10 +72,9 @@ it('should do nothing but I am not 100% sure', () => {})
 
 - Only descriptions of `it` functions are considered
 
-- 🛠️ This rule has auto-fix for 100% of the issues it reports 🎉  
+- 🛠️ This rule has auto-fix for many of the issues it reports 🎉  
   Run eslint with the `--fix` or `--fix-dry-run` option
 
 - 📗 This rule works with a small inner English dictionnary of the most common
   verbs starting descripitions. It would be easy extend it/make it customizable
-  with a new option. That would additionally give i18n support. Let me know if
-  you need it ! 💬
+  with a new option. Let me know if you need it ! 💬
