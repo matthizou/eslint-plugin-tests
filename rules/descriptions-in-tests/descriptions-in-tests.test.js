@@ -57,21 +57,31 @@ ruleTester.run("jest-descriptions-first-word", rule, {
       output: 'it("do something", () => {})', // Normally run recursively, so will become: `does`
     },
     {
-      // Pattern seen in recursive autofix
       code: `it("it does something", () => {})`,
       errors: [{ message: errorMessages.DUPLICATED_IT }],
       output: 'it("does something", () => {})',
     },
     {
+      code: `it("does something if you look at it", () => {})`,
+      errors: [{ message: errorMessages.USE_OF_IF_INSTEAD_OF_WHEN }],
+      options: [{ preferWhenToIf: true }],
+      output: 'it("does something when you look at it", () => {})',
+    },
+    {
+      code: `it("${"a".repeat(101)}", () => {})`,
+      errors: [{ message: errorMessages.TOO_LONG }],
+      output: `it("${"a".repeat(101)}", () => {})`,
+    },
+    {
       // Pattern seen in recursive autofix
       code: `it("not return anything", () => {})`,
-      errors: [{ message: errorMessages.GENERIC_ERROR }],
+      errors: [{ message: errorMessages.INVALID_START_OF_DESCRIPTION }],
       output: 'it("does not return anything", () => {})',
     },
     {
       // Pattern seen in recursive autofix
       code: `it("not be called", () => {})`,
-      errors: [{ message: errorMessages.GENERIC_ERROR }],
+      errors: [{ message: errorMessages.INVALID_START_OF_DESCRIPTION }],
       output: 'it("is not called", () => {})',
     },
   ],
